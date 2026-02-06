@@ -27,9 +27,10 @@ namespace ViktorynaApp.Services
 
         public static IKorystuvachSettingsService CreateKorystuvachSettingsService()
         {
-            var korystuvachService = CreateKorystuvachService();
+            var daniService = new JsonDaniService<Korystuvach>("korystuvachi.json");
+            var korystuvachService = new KorystuvachService(daniService);
             var validator = new DataValidator();
-            return new KorystuvachSettingsService(korystuvachService, validator);
+            return new KorystuvachSettingsService(korystuvachService, validator, daniService);
         }
 
         public static ITopResultsService CreateTopResultsService()

@@ -13,7 +13,7 @@ namespace ViktorynaApp.Services
             _daniService = daniService;
         }
 
-        // Конструктор по умолчанию
+        // Конструктор за замовчуванням.
         public KorystuvachService()
         {
             _daniService = new JsonDaniService<Korystuvach>("korystuvachi.json");

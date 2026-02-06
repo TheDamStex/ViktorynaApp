@@ -9,11 +9,16 @@ namespace ViktorynaApp.Services
     {
         private readonly IKorystuvachService _korystuvachService;
         private readonly IDataValidator _validator;
+        private readonly IDaniService<Korystuvach> _daniService;
 
-        public KorystuvachSettingsService(IKorystuvachService korystuvachService, IDataValidator validator)
+        public KorystuvachSettingsService(
+            IKorystuvachService korystuvachService,
+            IDataValidator validator,
+            IDaniService<Korystuvach> daniService)
         {
             _korystuvachService = korystuvachService;
             _validator = validator;
+            _daniService = daniService;
         }
 
         public Korystuvach? OtrymatyKorystuvacha(string login)
@@ -71,10 +76,8 @@ namespace ViktorynaApp.Services
                 {
                     vsiKorystuvachi[i] = updatedKorystuvach;
 
-                    // Оновлюємо через KorystuvachService
-                    // Створюємо новий сервіс для збереження
-                    var daniService = new JsonDaniService<Korystuvach>("korystuvachi.json");
-                    daniService.Zberehty(vsiKorystuvachi);
+                    // Зберігаємо оновлений список у спільне сховище.
+                    _daniService.Zberehty(vsiKorystuvachi);
                     return true;
                 }
             }

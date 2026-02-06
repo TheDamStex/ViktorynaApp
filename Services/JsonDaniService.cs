@@ -1,35 +1,32 @@
-﻿// Services/JsonDaniService.cs (обновленная версия)
+﻿// Services/JsonDaniService.cs
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 
 namespace ViktorynaApp.Services
 {
     public class JsonDaniService<T> : IDaniService<T> where T : class
     {
-        private string shliakhDoFailu;
+        private readonly IDataStorage<T> _storage;
         private List<T>? _cachedData;
         private DateTime _lastCacheTime;
 
         public JsonDaniService(string imiaFailu)
         {
-            string dataFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Data");
-            Directory.CreateDirectory(dataFolder);
+            _storage = new JsonStorage<T>(imiaFailu);
+        }
 
-            shliakhDoFailu = Path.Combine(dataFolder, imiaFailu);
-
-            if (!File.Exists(shliakhDoFailu))
-                File.WriteAllText(shliakhDoFailu, "[]");
+        public JsonDaniService(IDataStorage<T> storage)
+        {
+            _storage = storage;
         }
 
         public List<T> Zavantazhyty()
         {
-            // Кешування на 5 секунд
+            // Кешування на 5 секунд, щоб не читати файл занадто часто.
             if (_cachedData != null && (DateTime.Now - _lastCacheTime).TotalSeconds < 5)
                 return _cachedData;
 
-            string json = File.ReadAllText(shliakhDoFailu);
-            _cachedData = JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+            _cachedData = _storage.Load();
             _lastCacheTime = DateTime.Now;
 
             return _cachedData;
@@ -37,33 +34,11 @@ namespace ViktorynaApp.Services
 
         public void Zberehty(List<T> dani)
         {
-            string json = JsonSerializer.Serialize(dani, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            _storage.Save(dani);
 
-            File.WriteAllText(shliakhDoFailu, json);
-
-            // Оновлюємо кеш
+            // Оновлюємо кеш після успішного запису.
             _cachedData = dani;
             _lastCacheTime = DateTime.Now;
-        }
-
-        // Новий метод для асинхронної роботи
-        public async System.Threading.Tasks.Task<List<T>> ZavantazhytyAsync()
-        {
-            string json = await File.ReadAllTextAsync(shliakhDoFailu);
-            return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
-        }
-
-        public async System.Threading.Tasks.Task ZberehtyAsync(List<T> dani)
-        {
-            string json = JsonSerializer.Serialize(dani, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            await File.WriteAllTextAsync(shliakhDoFailu, json);
         }
     }
 }
