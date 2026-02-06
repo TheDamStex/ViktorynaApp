@@ -1,0 +1,64 @@
+﻿<Window x:Class="ViktorynaApp.ViktorynaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Вікторина" Height="600" Width="800" Background="#F0F4FF">
+
+    <Border Margin="20" CornerRadius="15" Background="White" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <StackPanel Grid.Row="0">
+                <TextBlock x:Name="TitleText" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+                <TextBlock x:Name="QuestionCounter" 
+                           FontSize="16" 
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Питання та варіанти -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,20,0,20">
+                <StackPanel>
+                    <TextBlock x:Name="QuestionText" 
+                               FontSize="18" 
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,20"/>
+
+                    <ItemsControl x:Name="AnswersList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Text}" 
+                                          IsChecked="{Binding IsSelected}"
+                                          Margin="0,5"
+                                          FontSize="16"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="PrevButton" 
+                        Content="Назад" 
+                        Width="100" 
+                        Height="35" 
+                        Margin="0,0,10,0"
+                        Click="PrevButton_Click"/>
+                <Button x:Name="NextButton" 
+                        Content="Наступне" 
+                        Width="100" 
+                        Height="35" 
+                        Click="NextButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

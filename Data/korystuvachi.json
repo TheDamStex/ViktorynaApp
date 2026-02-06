@@ -1,0 +1,12 @@
+[
+  {
+    "Login": "Test123",
+    "Parol": "123123",
+    "DataNarodzhennia": "27.03.2020"
+  },
+  {
+    "Login": "123123",
+    "Parol": "123123",
+    "DataNarodzhennia": "02.12.2005"
+  }
+]

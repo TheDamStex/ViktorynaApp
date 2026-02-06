@@ -1,0 +1,27 @@
+﻿<Window x:Class="ViktorynaApp.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Реєстрація" Height="450" Width="450" Background="#F0FFF4">
+
+    <Border Margin="30" CornerRadius="15" Background="White" Padding="20">
+        <StackPanel>
+
+            <TextBlock Text="Реєстрація" FontSize="24" HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Логін"/>
+            <TextBox x:Name="LoginBox"/>
+
+            <TextBlock Text="Пароль"/>
+            <PasswordBox x:Name="ParolBox"/>
+
+            <TextBlock Text="Дата народження"/>
+            <DatePicker x:Name="DataPicker"
+            SelectedDateFormat="Short"
+            DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
+
+            <Button Content="Зареєструватися" Height="40" Margin="0,10,0,0" Click="Register_Click"/>
+
+        </StackPanel>
+    </Border>
+</Window>

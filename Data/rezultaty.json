@@ -1,0 +1,34 @@
+[
+  {
+    "Login": "123123",
+    "Rozdil": "\u0406\u0441\u0442\u043E\u0440\u0456\u044F",
+    "KilkistPravylnyh": 2,
+    "DataVykonannia": "2026-02-06T00:23:05.1212507+02:00",
+    "ProcentPravylnyh": 10,
+    "RezultatText": "2/20 (10%)"
+  },
+  {
+    "Login": "123123",
+    "Rozdil": "\u0411\u0456\u043E\u043B\u043E\u0433\u0456\u044F",
+    "KilkistPravylnyh": 0,
+    "DataVykonannia": "2026-02-06T00:23:05.1212822+02:00",
+    "ProcentPravylnyh": 0,
+    "RezultatText": "0/20 (0%)"
+  },
+  {
+    "Login": "123123",
+    "Rozdil": "\u0417\u043C\u0456\u0448\u0430\u043D\u0430",
+    "KilkistPravylnyh": 4,
+    "DataVykonannia": "2026-02-06T00:23:05.1208016+02:00",
+    "ProcentPravylnyh": 20,
+    "RezultatText": "4/20 (20%)"
+  },
+  {
+    "Login": "123123",
+    "Rozdil": "\u0411\u0456\u043E\u043B\u043E\u0433\u0456\u044F",
+    "KilkistPravylnyh": 0,
+    "DataVykonannia": "2026-02-06T18:56:20.7188305+02:00",
+    "ProcentPravylnyh": 0,
+    "RezultatText": "0/20 (0%)"
+  }
+]
