@@ -8,12 +8,17 @@ namespace ViktorynaApp.Models
         public string Login { get; set; } = "";
         public string Rozdil { get; set; } = "";
         public int KilkistPravylnyh { get; set; }
+        public int TotalQuestions { get; set; } = 20;
         public DateTime DataVykonannia { get; set; } = DateTime.Now;
 
+        public int EffectiveTotalQuestions => TotalQuestions > 0 ? TotalQuestions : 20;
+
         // Додаємо властивість для відсотка правильних відповідей
-        public int ProcentPravylnyh => KilkistPravylnyh * 5; // 5% за кожну правильну відповідь з 20
+        public int ProcentPravylnyh => EffectiveTotalQuestions == 0
+            ? 0
+            : (int)Math.Round((double)KilkistPravylnyh / EffectiveTotalQuestions * 100);
 
         // Властивість для відображення у таблиці
-        public string RezultatText => $"{KilkistPravylnyh}/20 ({ProcentPravylnyh}%)";
+        public string RezultatText => $"{KilkistPravylnyh}/{EffectiveTotalQuestions} ({ProcentPravylnyh}%)";
     }
 }

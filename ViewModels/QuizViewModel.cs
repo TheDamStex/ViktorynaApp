@@ -100,7 +100,8 @@ namespace ViktorynaApp.ViewModels
             {
                 Login = _login,
                 Rozdil = _category,
-                KilkistPravylnyh = correctAnswers
+                KilkistPravylnyh = correctAnswers,
+                TotalQuestions = Questions.Count
             };
 
             _viktorynaService.DodatyRezultat(result);

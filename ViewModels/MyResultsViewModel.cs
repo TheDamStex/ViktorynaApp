@@ -33,7 +33,8 @@ namespace ViktorynaApp.ViewModels
                 {
                     Rozdil = rezultat.Rozdil,
                     KilkistPravylnyh = rezultat.KilkistPravylnyh,
-                    Procent = (rezultat.KilkistPravylnyh * 100) / 20,
+                    TotalQuestions = rezultat.EffectiveTotalQuestions,
+                    Procent = rezultat.ProcentPravylnyh,
                     DataVykonannia = rezultat.DataVykonannia.ToString("dd.MM.yyyy HH:mm")
                 });
             }
