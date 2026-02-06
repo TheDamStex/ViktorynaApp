@@ -17,7 +17,7 @@ namespace ViktorynaApp.Services
             _validator = validator;
         }
 
-        public Korystuvach Login(string login, string parol)
+        public Korystuvach? Login(string login, string parol)
         {
             return _korystuvachService.Uviyty(login, parol);
         }
