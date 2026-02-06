@@ -67,7 +67,7 @@ namespace ViktorynaApp.Services
             };
 
             // Зберігаємо результат
-            SaveQuizResult(session.UserId, session.Category, correctAnswers);
+            SaveQuizResult(session.UserId, session.Category, correctAnswers, totalQuestions);
 
             // Видаляємо сесію
             _activeSessions.Remove(session.Id);
@@ -87,13 +87,14 @@ namespace ViktorynaApp.Services
                    correctAnswers.All(selectedAnswers.Contains);
         }
 
-        private void SaveQuizResult(string userId, string category, int correctAnswers)
+        private void SaveQuizResult(string userId, string category, int correctAnswers, int totalQuestions)
         {
             var result = new Models.Rezultat
             {
                 Login = userId,
                 Rozdil = category,
-                KilkistPravylnyh = correctAnswers
+                KilkistPravylnyh = correctAnswers,
+                TotalQuestions = totalQuestions
             };
 
             _viktorynaService.DodatyRezultat(result);

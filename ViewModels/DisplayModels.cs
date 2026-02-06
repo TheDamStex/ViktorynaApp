@@ -8,7 +8,10 @@ namespace ViktorynaApp.ViewModels
         public string Login { get; set; } = "";
         public string Rozdil { get; set; } = "";
         public int KilkistPravylnyh { get; set; }
+        public int TotalQuestions { get; set; }
+        public int Procent { get; set; }
         public string DataVykonannia { get; set; } = "";
+        public string RezultatText => $"{KilkistPravylnyh}/{TotalQuestions} ({Procent}%)";
     }
 
     // Для Моїх результатів
@@ -16,8 +19,9 @@ namespace ViktorynaApp.ViewModels
     {
         public string Rozdil { get; set; } = "";
         public int KilkistPravylnyh { get; set; }
+        public int TotalQuestions { get; set; }
         public int Procent { get; set; }
         public string DataVykonannia { get; set; } = "";
-        public string RezultatText => $"{KilkistPravylnyh}/20 ({Procent}%)";
+        public string RezultatText => $"{KilkistPravylnyh}/{TotalQuestions} ({Procent}%)";
     }
 }

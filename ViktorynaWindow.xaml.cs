@@ -139,6 +139,7 @@ namespace ViktorynaApp
                 Login = _login,
                 Rozdil = _category,
                 KilkistPravylnyh = correctCount,
+                TotalQuestions = _questions.Count,
                 DataVykonannia = DateTime.Now // Додаємо поточну дату
             };
 

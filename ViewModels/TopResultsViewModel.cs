@@ -58,6 +58,8 @@ namespace ViktorynaApp.ViewModels
                     Login = rezultat.Login,
                     Rozdil = rezultat.Rozdil,
                     KilkistPravylnyh = rezultat.KilkistPravylnyh,
+                    TotalQuestions = rezultat.EffectiveTotalQuestions,
+                    Procent = rezultat.ProcentPravylnyh,
                     DataVykonannia = rezultat.DataVykonannia.ToString("dd.MM.yyyy HH:mm")
                 });
             }

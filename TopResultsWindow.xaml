@@ -67,7 +67,7 @@
                                 <GridViewColumn Header="Розділ" Width="100" DisplayMemberBinding="{Binding Rozdil}"/>
                                 <!-- ИСПРАВЛЕНО: Правильный синтаксис для StringFormat -->
                                 <GridViewColumn Header="Результат" Width="80" 
-                                                DisplayMemberBinding="{Binding KilkistPravylnyh, StringFormat=\{0\}/20}"/>
+                                                DisplayMemberBinding="{Binding RezultatText}"/>
                                 <GridViewColumn Header="Дата" Width="130" DisplayMemberBinding="{Binding DataVykonannia}"/>
                             </GridView>
                         </ListView.View>

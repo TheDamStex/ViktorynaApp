@@ -44,7 +44,7 @@ namespace ViktorynaApp.Services
             int zagalnaPravylnyh = rezultaty.Sum(r => r.KilkistPravylnyh);
 
             // Середній процент
-            double seredniyProcent = rezultaty.Average(r => (r.KilkistPravylnyh * 100.0) / 20.0);
+            double seredniyProcent = rezultaty.Average(r => r.ProcentPravylnyh);
 
             // Найкращий результат
             var najkrashyi = rezultaty.OrderByDescending(r => r.KilkistPravylnyh).First();
@@ -55,7 +55,7 @@ namespace ViktorynaApp.Services
                 .Select(g => new
                 {
                     Rozdil = g.Key,
-                    Seredniy = g.Average(r => r.KilkistPravylnyh),
+                    Seredniy = g.Average(r => r.ProcentPravylnyh),
                     Kilkist = g.Count()
                 })
                 .OrderByDescending(x => x.Seredniy)
