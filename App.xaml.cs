@@ -10,7 +10,7 @@ namespace ViktorynaApp
         public static IKorystuvachService? KorystuvachService { get; private set; }
         public static IViktorynaService? ViktorynaService { get; private set; }
         public static IQuizManager? QuizManager { get; private set; }
-        public static AuthService? AuthService { get; private set; }
+        public static IAuthService? AuthService { get; private set; }
         public static IKorystuvachSettingsService? KorystuvachSettingsService { get; private set; } // НОВЕ
         public static ITopResultsService? TopResultsService { get; private set; }
         public static IMyResultsService? MyResultsService { get; private set; }
@@ -32,7 +32,8 @@ namespace ViktorynaApp
                 TopResultsService = ServiceFactory.CreateTopResultsService();
                 MyResultsService = ServiceFactory.CreateMyResultsService();
 
-                var validator = new KorystuvachValidator();
+                var dataValidator = new DataValidator();
+                var validator = new KorystuvachValidator(dataValidator);
                 AuthService = new AuthService(KorystuvachService, validator);
 
                 if (KorystuvachService == null || ViktorynaService == null ||

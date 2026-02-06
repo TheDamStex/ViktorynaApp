@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ViktorynaApp.Validators
 {
@@ -10,5 +6,4 @@ namespace ViktorynaApp.Validators
     {
         List<string> Validate(T model);
     }
-
 }
