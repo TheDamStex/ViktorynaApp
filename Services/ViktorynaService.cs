@@ -1,4 +1,4 @@
-﻿// Services/ViktorynaService.cs (полная исправленная версия)
+﻿// Services/ViktorynaService.cs (повна виправлена версія)
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,17 +32,14 @@ namespace ViktorynaApp.Services
 
             var vsiPytannia = _pytanniaService.Zavantazhyty();
             var rand = new Random();
+            var filtr = vsiPytannia.AsEnumerable();
 
-            if (rozdil == "Змішана")
+            if (rozdil != "Змішана")
             {
-                return vsiPytannia
-                    .OrderBy(x => rand.Next())
-                    .Take(20)
-                    .ToList();
+                filtr = filtr.Where(p => p.Rozdil == rozdil);
             }
 
-            return vsiPytannia
-                .Where(p => p.Rozdil == rozdil)
+            return filtr
                 .OrderBy(x => rand.Next())
                 .Take(20)
                 .ToList();
@@ -77,24 +74,18 @@ namespace ViktorynaApp.Services
                 return new List<Rezultat>();
 
             var vsiRezultaty = _rezultatyService.Zavantazhyty();
+            var filtr = vsiRezultaty.AsEnumerable();
 
-            if (rozdil == "Усі" || string.IsNullOrEmpty(rozdil))
+            if (!string.IsNullOrEmpty(rozdil) && rozdil != "Усі")
             {
-                return vsiRezultaty
-                    .OrderByDescending(r => r.KilkistPravylnyh)
-                    .ThenBy(r => r.DataVykonannia)
-                    .Take(20)
-                    .ToList();
+                filtr = filtr.Where(r => r.Rozdil == rozdil);
             }
-            else
-            {
-                return vsiRezultaty
-                    .Where(r => r.Rozdil == rozdil)
-                    .OrderByDescending(r => r.KilkistPravylnyh)
-                    .ThenBy(r => r.DataVykonannia)
-                    .Take(20)
-                    .ToList();
-            }
+
+            return filtr
+                .OrderByDescending(r => r.KilkistPravylnyh)
+                .ThenBy(r => r.DataVykonannia)
+                .Take(20)
+                .ToList();
         }
 
         public List<Rezultat> OtrymatyRezultatyKorystuvacha(string login)
@@ -109,7 +100,7 @@ namespace ViktorynaApp.Services
                 .ToList();
         }
 
-        // ДОДАЄМО ЦЕЙ МЕТОД
+        // Додаємо цей метод для зручного доступу до всіх результатів.
         public List<Rezultat> OtrymatyVsiRezultaty()
         {
             if (_rezultatyService == null)
