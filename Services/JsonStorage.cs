@@ -10,6 +10,12 @@ namespace ViktorynaApp.Services
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
+        private static readonly Dictionary<string, string> LegacyFileMap = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["korystuvachi.json"] = "data_korysnyky.json",
+            ["pytannia.json"] = "data_pytannia.json",
+            ["rezultaty.json"] = "data_rezultaty.json"
+        };
 
         public JsonStorage(string fileName)
         {
@@ -18,6 +24,7 @@ namespace ViktorynaApp.Services
 
             _filePath = Path.Combine(dataFolder, fileName);
             _options = new JsonSerializerOptions { WriteIndented = true };
+            MigrateLegacyFile(fileName, dataFolder);
         }
 
         public List<T> Load()
@@ -57,7 +64,7 @@ namespace ViktorynaApp.Services
             try
             {
                 string json = JsonSerializer.Serialize(data, _options);
-                ZapysatyAtomarno(json);
+                ZapysatyAtomarno(_filePath, json);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -104,12 +111,72 @@ namespace ViktorynaApp.Services
         }
 
         // Запис через тимчасовий файл захищає дані від пошкодження при збоях.
-        private void ZapysatyAtomarno(string json)
+        private void MigrateLegacyFile(string fileName, string dataFolder)
         {
-            string tempPath = _filePath + ".tmp";
+            if (!LegacyFileMap.TryGetValue(fileName, out string? legacyName))
+            {
+                return;
+            }
 
+            string legacyPath = Path.Combine(dataFolder, legacyName);
+            if (!File.Exists(legacyPath))
+            {
+                return;
+            }
+
+            if (!File.Exists(_filePath))
+            {
+                File.Move(legacyPath, _filePath);
+                return;
+            }
+
+            string legacyJson = File.ReadAllText(legacyPath);
+            string targetJson = File.ReadAllText(_filePath);
+
+            if (string.IsNullOrWhiteSpace(legacyJson) || legacyJson.Trim() == "[]")
+            {
+                File.Delete(legacyPath);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(targetJson) || targetJson.Trim() == "[]")
+            {
+                File.Copy(legacyPath, _filePath, true);
+                File.Delete(legacyPath);
+                return;
+            }
+
+            try
+            {
+                var legacyItems = JsonSerializer.Deserialize<List<JsonElement>>(legacyJson) ?? new List<JsonElement>();
+                var targetItems = JsonSerializer.Deserialize<List<JsonElement>>(targetJson) ?? new List<JsonElement>();
+
+                if (legacyItems.Count == 0)
+                {
+                    File.Delete(legacyPath);
+                    return;
+                }
+
+                var combined = new List<JsonElement>(targetItems.Count + legacyItems.Count);
+                combined.AddRange(targetItems);
+                combined.AddRange(legacyItems);
+
+                string mergedJson = JsonSerializer.Serialize(combined, _options);
+                ZapysatyAtomarno(_filePath, mergedJson);
+                File.Delete(legacyPath);
+            }
+            catch (JsonException)
+            {
+                string backupPath = legacyPath + ".legacy";
+                File.Move(legacyPath, backupPath, true);
+            }
+        }
+
+        private static void ZapysatyAtomarno(string filePath, string json)
+        {
+            string tempPath = filePath + ".tmp";
             File.WriteAllText(tempPath, json);
-            File.Move(tempPath, _filePath, true);
+            File.Move(tempPath, filePath, true);
         }
     }
 }
