@@ -50,7 +50,7 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Розділ" Width="150" DisplayMemberBinding="{Binding Rozdil}"/>
-                                <GridViewColumn Header="Результат" Width="100" DisplayMemberBinding="{Binding KilkistPravylnyh, StringFormat='{}/20'}"/>
+                                <GridViewColumn Header="Результат" Width="120" DisplayMemberBinding="{Binding RezultatText}"/>
                                 <GridViewColumn Header="Дата" Width="200" DisplayMemberBinding="{Binding DataVykonannia}"/>
                             </GridView>
                         </ListView.View>

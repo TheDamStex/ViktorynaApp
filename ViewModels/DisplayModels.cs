@@ -18,5 +18,6 @@ namespace ViktorynaApp.ViewModels
         public int KilkistPravylnyh { get; set; }
         public int Procent { get; set; }
         public string DataVykonannia { get; set; } = "";
+        public string RezultatText => $"{KilkistPravylnyh}/20 ({Procent}%)";
     }
 }
