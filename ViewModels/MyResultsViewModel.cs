@@ -13,6 +13,9 @@ namespace ViktorynaApp.ViewModels
 
         public ObservableCollection<MyResultDisplay> Rezultaty { get; } = new ObservableCollection<MyResultDisplay>();
         public StatystykaKorystuvacha Statystyka { get; private set; } = new StatystykaKorystuvacha();
+        public int ZagalnaKilkistViktoryn => Statystyka.ZagalnaKilkistViktoryn;
+        public int ZagalnaKilkistPravylnyh => Statystyka.ZagalnaKilkistPravylnyh;
+        public double SeredniyProcent => Statystyka.SeredniyProcent;
 
         public MyResultsViewModel(IMyResultsService service, string login)
         {
@@ -42,6 +45,9 @@ namespace ViktorynaApp.ViewModels
             // Завантажуємо статистику
             Statystyka = _service.OtrymatyStatystyku(_login);
             OnPropertyChanged(nameof(Statystyka));
+            OnPropertyChanged(nameof(ZagalnaKilkistViktoryn));
+            OnPropertyChanged(nameof(ZagalnaKilkistPravylnyh));
+            OnPropertyChanged(nameof(SeredniyProcent));
         }
     }
 }
