@@ -8,14 +8,8 @@ namespace ViktorynaApp.Services
 {
     public class ViktorynaService : IViktorynaService
     {
-        private readonly IDaniService<Pytannia>? _pytanniaService;
-        private readonly IDaniService<Rezultat>? _rezultatyService;
-
-        public ViktorynaService()
-        {
-            _pytanniaService = new JsonDaniService<Pytannia>("pytannia.json");
-            _rezultatyService = new JsonDaniService<Rezultat>("rezultaty.json");
-        }
+        private readonly IDaniService<Pytannia> _pytanniaService;
+        private readonly IDaniService<Rezultat> _rezultatyService;
 
         public ViktorynaService(
             IDaniService<Pytannia> pytanniaService,
@@ -27,9 +21,6 @@ namespace ViktorynaApp.Services
 
         public List<Pytannia> OtrymatyPytannia(string rozdil)
         {
-            if (_pytanniaService == null)
-                return new List<Pytannia>();
-
             var vsiPytannia = _pytanniaService.Zavantazhyty();
             var rand = new Random();
             var filtr = vsiPytannia.AsEnumerable();
@@ -47,9 +38,6 @@ namespace ViktorynaApp.Services
 
         public List<string> OtrymatyVsiRozdily()
         {
-            if (_pytanniaService == null)
-                return new List<string>();
-
             var vsiPytannia = _pytanniaService.Zavantazhyty();
             return vsiPytannia
                 .Select(p => p.Rozdil)
@@ -60,9 +48,6 @@ namespace ViktorynaApp.Services
 
         public void DodatyRezultat(Rezultat rezultat)
         {
-            if (_rezultatyService == null)
-                return;
-
             var vsiRezultaty = _rezultatyService.Zavantazhyty();
             vsiRezultaty.Add(rezultat);
             _rezultatyService.Zberehty(vsiRezultaty);
@@ -70,9 +55,6 @@ namespace ViktorynaApp.Services
 
         public List<Rezultat> OtrymatyTop20(string rozdil)
         {
-            if (_rezultatyService == null)
-                return new List<Rezultat>();
-
             var vsiRezultaty = _rezultatyService.Zavantazhyty();
             var filtr = vsiRezultaty.AsEnumerable();
 
@@ -90,9 +72,6 @@ namespace ViktorynaApp.Services
 
         public List<Rezultat> OtrymatyRezultatyKorystuvacha(string login)
         {
-            if (_rezultatyService == null)
-                return new List<Rezultat>();
-
             var vsiRezultaty = _rezultatyService.Zavantazhyty();
             return vsiRezultaty
                 .Where(r => r.Login == login)
@@ -103,9 +82,6 @@ namespace ViktorynaApp.Services
         // Додаємо цей метод для зручного доступу до всіх результатів.
         public List<Rezultat> OtrymatyVsiRezultaty()
         {
-            if (_rezultatyService == null)
-                return new List<Rezultat>();
-
             return _rezultatyService.Zavantazhyty();
         }
     }
