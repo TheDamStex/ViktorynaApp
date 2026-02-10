@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using ViktorynaApp.Services;
+using ViktorynaApp.Factories;
 using ViktorynaApp.ViewModels;
 
 namespace ViktorynaApp
@@ -8,37 +8,22 @@ namespace ViktorynaApp
     public partial class SettingsWindow : Window
     {
         private SettingsViewModel? _viewModel; // Додаємо ?
-        private readonly IAuthService _authService;
-        private readonly IViktorynaService _viktorynaService;
-        private readonly IKorystuvachSettingsService _korystuvachSettingsService;
-        private readonly ITopResultsService _topResultsService;
-        private readonly IMyResultsService _myResultsService;
+        private readonly string _login;
+        private readonly IWindowFactory _windowFactory;
 
         public SettingsWindow(
+            SettingsViewModel viewModel,
             string login,
-            IKorystuvachSettingsService korystuvachSettingsService,
-            IAuthService authService,
-            IViktorynaService viktorynaService,
-            ITopResultsService topResultsService,
-            IMyResultsService myResultsService)
+            IWindowFactory windowFactory)
         {
             InitializeComponent();
-            _authService = authService;
-            _viktorynaService = viktorynaService;
-            _korystuvachSettingsService = korystuvachSettingsService;
-            _topResultsService = topResultsService;
-            _myResultsService = myResultsService;
+            _login = login;
+            _windowFactory = windowFactory;
 
-            _viewModel = new SettingsViewModel(_korystuvachSettingsService, login);
+            _viewModel = viewModel;
             _viewModel.OnCloseRequested += () =>
             {
-                var menuWindow = new MenuWindow(
-                    login,
-                    _authService,
-                    _viktorynaService,
-                    _korystuvachSettingsService,
-                    _topResultsService,
-                    _myResultsService);
+                var menuWindow = _windowFactory.CreateMenuWindow(_login);
                 menuWindow.Show();
                 Close();
             };

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using ViktorynaApp.Models;
+using ViktorynaApp.Factories;
 using ViktorynaApp.Services;
 
 namespace ViktorynaApp
@@ -12,13 +13,15 @@ namespace ViktorynaApp
         private readonly IKorystuvachSettingsService _korystuvachSettingsService;
         private readonly ITopResultsService _topResultsService;
         private readonly IMyResultsService _myResultsService;
+        private readonly IWindowFactory _windowFactory;
 
         public RegisterWindow(
             IAuthService authService,
             IViktorynaService viktorynaService,
             IKorystuvachSettingsService korystuvachSettingsService,
             ITopResultsService topResultsService,
-            IMyResultsService myResultsService)
+            IMyResultsService myResultsService,
+            IWindowFactory windowFactory)
         {
             InitializeComponent();
             _authService = authService;
@@ -26,6 +29,7 @@ namespace ViktorynaApp
             _korystuvachSettingsService = korystuvachSettingsService;
             _topResultsService = topResultsService;
             _myResultsService = myResultsService;
+            _windowFactory = windowFactory;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -52,12 +56,7 @@ namespace ViktorynaApp
             if (uspishno)
             {
                 MessageBox.Show("Реєстрація успішна!");
-                MainWindow main = new MainWindow(
-                    _authService,
-                    _viktorynaService,
-                    _korystuvachSettingsService,
-                    _topResultsService,
-                    _myResultsService);
+                MainWindow main = _windowFactory.CreateMainWindow();
                 main.Show();
                 Close();
             }
@@ -69,12 +68,7 @@ namespace ViktorynaApp
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow main = new MainWindow(
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            MainWindow main = _windowFactory.CreateMainWindow();
             main.Show();
             Close();
         }

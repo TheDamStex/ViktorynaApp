@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ViktorynaApp.Models;
+using ViktorynaApp.Factories;
 using ViktorynaApp.Services;
 
 namespace ViktorynaApp
@@ -16,6 +17,7 @@ namespace ViktorynaApp
         private readonly IKorystuvachSettingsService _korystuvachSettingsService;
         private readonly ITopResultsService _topResultsService;
         private readonly IMyResultsService _myResultsService;
+        private readonly IWindowFactory _windowFactory;
         private List<Pytannia> _questions = new List<Pytannia>(); // Ініціалізуємо
         private int _currentQuestionIndex = 0;
         private List<List<bool>> _userAnswers = new List<List<bool>>(); // Ініціалізуємо
@@ -27,7 +29,8 @@ namespace ViktorynaApp
             IViktorynaService viktorynaService,
             IKorystuvachSettingsService korystuvachSettingsService,
             ITopResultsService topResultsService,
-            IMyResultsService myResultsService)
+            IMyResultsService myResultsService,
+            IWindowFactory windowFactory)
         {
             InitializeComponent();
             _login = login;
@@ -37,6 +40,7 @@ namespace ViktorynaApp
             _korystuvachSettingsService = korystuvachSettingsService;
             _topResultsService = topResultsService;
             _myResultsService = myResultsService;
+            _windowFactory = windowFactory;
             PochatyViktorynu();
         }
 
@@ -162,13 +166,7 @@ namespace ViktorynaApp
                           $"Ваш результат збережено.");
 
             // Повертаємось у меню
-            var menuWindow = new MenuWindow(
-                _login,
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            var menuWindow = _windowFactory.CreateMenuWindow(_login);
             menuWindow.Show();
             Close();
         }

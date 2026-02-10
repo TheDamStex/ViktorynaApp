@@ -1,6 +1,7 @@
 ﻿// Services/IQuizManager.cs
-using ViktorynaApp.Models;
+using System;
 using System.Collections.Generic;
+using ViktorynaApp.Models;
 
 namespace ViktorynaApp.Services
 {
@@ -19,6 +20,8 @@ namespace ViktorynaApp.Services
         public List<Pytannia> Questions { get; set; }
         public List<QuestionResult> Answers { get; set; }
         public DateTime StartTime { get; set; }
+        public int CurrentQuestionIndex { get; set; }
+        public int Score { get; set; }
     }
 
     public class QuestionResult

@@ -1,6 +1,6 @@
 ﻿// App.xaml.cs (доповнюємо)
 using System.Windows;
-using ViktorynaApp.Models;
+using ViktorynaApp.Factories;
 using ViktorynaApp.Services;
 using ViktorynaApp.Validators;
 
@@ -18,35 +18,32 @@ namespace ViktorynaApp
         {
             try
             {
-                IDataStorage<Korystuvach> korystuvachiDataStorage = new JsonStorage<Korystuvach>("korystuvachi.json");
-                IDataStorage<Pytannia> pytanniaDataStorage = new JsonStorage<Pytannia>("pytannia.json");
-                IDataStorage<Rezultat> rezultatyDataStorage = new JsonStorage<Rezultat>("rezultaty.json");
-
-                var korystuvachiStorage = new JsonDaniService<Korystuvach>(korystuvachiDataStorage);
-                var pytanniaStorage = new JsonDaniService<Pytannia>(pytanniaDataStorage);
-                var rezultatyStorage = new JsonDaniService<Rezultat>(rezultatyDataStorage);
-
                 var dataValidator = new DataValidator();
 
-                var korystuvachService = new KorystuvachService(korystuvachiStorage);
-                var viktorynaService = new ViktorynaService(pytanniaStorage, rezultatyStorage);
+                // Абстрактна фабрика створює пов'язані сервіси даних.
+                IAppServicesFactory appServicesFactory = new JsonAppServicesFactory();
+
+                var korystuvachService = appServicesFactory.CreateKorystuvachService();
+                var viktorynaService = appServicesFactory.CreateViktorynaService();
+                var topResultsService = appServicesFactory.CreateTopResultsService();
+                var myResultsService = appServicesFactory.CreateMyResultsService();
                 var korystuvachSettingsService = new KorystuvachSettingsService(
                     korystuvachService,
                     dataValidator,
-                    korystuvachiStorage);
-                var topResultsService = new TopResultsService(rezultatyStorage);
-                var myResultsService = new MyResultsService(rezultatyStorage);
+                    appServicesFactory.CreateKorystuvachDaniService());
 
                 var validator = new KorystuvachValidator(dataValidator);
                 var authService = new AuthService(korystuvachService, validator);
 
-                var mainWindow = new MainWindow(
+                // Фабрика вікон одразу підставляє залежності та DataContext.
+                IWindowFactory windowFactory = new WindowFactory(
                     authService,
                     viktorynaService,
                     korystuvachSettingsService,
                     topResultsService,
                     myResultsService);
 
+                var mainWindow = windowFactory.CreateMainWindow();
                 mainWindow.Show();
             }
             catch (Exception ex)

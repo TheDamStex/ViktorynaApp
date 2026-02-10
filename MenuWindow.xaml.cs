@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ViktorynaApp.Factories;
 using ViktorynaApp.Services;
 
 namespace ViktorynaApp
@@ -11,6 +12,7 @@ namespace ViktorynaApp
         private readonly IKorystuvachSettingsService _korystuvachSettingsService;
         private readonly ITopResultsService _topResultsService;
         private readonly IMyResultsService _myResultsService;
+        private readonly IWindowFactory _windowFactory;
 
         public MenuWindow(
             string login,
@@ -18,7 +20,8 @@ namespace ViktorynaApp
             IViktorynaService viktorynaService,
             IKorystuvachSettingsService korystuvachSettingsService,
             ITopResultsService topResultsService,
-            IMyResultsService myResultsService)
+            IMyResultsService myResultsService,
+            IWindowFactory windowFactory)
         {
             InitializeComponent();
             _login = login;
@@ -27,57 +30,41 @@ namespace ViktorynaApp
             _korystuvachSettingsService = korystuvachSettingsService;
             _topResultsService = topResultsService;
             _myResultsService = myResultsService;
+            _windowFactory = windowFactory;
             WelcomeText.Text = _login + "!";
         }
 
         private void StartQuiz_Click(object sender, RoutedEventArgs e)
         {
-            var chooseWindow = new ChooseQuizWindow(
-                _login,
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            var chooseWindow = _windowFactory.CreateChooseQuizWindow(_login);
             chooseWindow.Show();
             Close();
         }
 
         private void MyResults_Click(object sender, RoutedEventArgs e)
         {
-            var window = new MyResultsWindow(_myResultsService, _login);
+            var window = _windowFactory.CreateMyResultsWindow(_login);
             window.Owner = this;
             window.ShowDialog();
         }
 
         private void TopResults_Click(object sender, RoutedEventArgs e)
         {
-            var window = new TopResultsWindow(_topResultsService);
+            var window = _windowFactory.CreateTopResultsWindow();
             window.Owner = this;
             window.ShowDialog();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(
-                _login,
-                _korystuvachSettingsService,
-                _authService,
-                _viktorynaService,
-                _topResultsService,
-                _myResultsService);
+            var settingsWindow = _windowFactory.CreateSettingsWindow(_login);
             settingsWindow.Show();
             Close();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow main = new MainWindow(
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            MainWindow main = _windowFactory.CreateMainWindow();
             main.Show();
             Close();
         }
