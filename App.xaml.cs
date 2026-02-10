@@ -18,9 +18,13 @@ namespace ViktorynaApp
         {
             try
             {
-                var korystuvachiStorage = new JsonDaniService<Korystuvach>("korystuvachi.json");
-                var pytanniaStorage = new JsonDaniService<Pytannia>("pytannia.json");
-                var rezultatyStorage = new JsonDaniService<Rezultat>("rezultaty.json");
+                IDataStorage<Korystuvach> korystuvachiDataStorage = new JsonStorage<Korystuvach>("korystuvachi.json");
+                IDataStorage<Pytannia> pytanniaDataStorage = new JsonStorage<Pytannia>("pytannia.json");
+                IDataStorage<Rezultat> rezultatyDataStorage = new JsonStorage<Rezultat>("rezultaty.json");
+
+                var korystuvachiStorage = new JsonDaniService<Korystuvach>(korystuvachiDataStorage);
+                var pytanniaStorage = new JsonDaniService<Pytannia>(pytanniaDataStorage);
+                var rezultatyStorage = new JsonDaniService<Rezultat>(rezultatyDataStorage);
 
                 var dataValidator = new DataValidator();
 
