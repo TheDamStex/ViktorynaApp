@@ -32,16 +32,7 @@
                                TextWrapping="Wrap"
                                Margin="0,0,0,20"/>
 
-                    <ItemsControl x:Name="AnswersList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox Content="{Binding Text}" 
-                                          IsChecked="{Binding IsSelected}"
-                                          Margin="0,5"
-                                          FontSize="16"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ItemsControl x:Name="AnswersList" />
                 </StackPanel>
             </ScrollViewer>
 
