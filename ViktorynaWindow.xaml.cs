@@ -3,35 +3,46 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ViktorynaApp.Models;
+using ViktorynaApp.Services;
 
 namespace ViktorynaApp
 {
     public partial class ViktorynaWindow : Window
     {
-        private string _login;
-        private string _category;
+        private readonly string _login;
+        private readonly string _category;
+        private readonly IAuthService _authService;
+        private readonly IViktorynaService _viktorynaService;
+        private readonly IKorystuvachSettingsService _korystuvachSettingsService;
+        private readonly ITopResultsService _topResultsService;
+        private readonly IMyResultsService _myResultsService;
         private List<Pytannia> _questions = new List<Pytannia>(); // Ініціалізуємо
         private int _currentQuestionIndex = 0;
         private List<List<bool>> _userAnswers = new List<List<bool>>(); // Ініціалізуємо
 
-        public ViktorynaWindow(string login, string category)
+        public ViktorynaWindow(
+            string login,
+            string category,
+            IAuthService authService,
+            IViktorynaService viktorynaService,
+            IKorystuvachSettingsService korystuvachSettingsService,
+            ITopResultsService topResultsService,
+            IMyResultsService myResultsService)
         {
             InitializeComponent();
             _login = login;
             _category = category;
+            _authService = authService;
+            _viktorynaService = viktorynaService;
+            _korystuvachSettingsService = korystuvachSettingsService;
+            _topResultsService = topResultsService;
+            _myResultsService = myResultsService;
             PochatyViktorynu();
         }
 
         private void PochatyViktorynu()
         {
-            if (App.ViktorynaService == null)
-            {
-                MessageBox.Show("Помилка завантаження питань");
-                Close();
-                return;
-            }
-
-            _questions = App.ViktorynaService.OtrymatyPytannia(_category);
+            _questions = _viktorynaService.OtrymatyPytannia(_category);
 
             if (_questions == null || _questions.Count == 0)
             {
@@ -143,10 +154,7 @@ namespace ViktorynaApp
                 DataVykonannia = DateTime.Now // Додаємо поточну дату
             };
 
-            if (App.ViktorynaService != null)
-            {
-                App.ViktorynaService.DodatyRezultat(result);
-            }
+            _viktorynaService.DodatyRezultat(result);
 
             // Показуємо результат
             MessageBox.Show($"Вікторину завершено!\n" +
@@ -154,7 +162,13 @@ namespace ViktorynaApp
                           $"Ваш результат збережено.");
 
             // Повертаємось у меню
-            var menuWindow = new MenuWindow(_login);
+            var menuWindow = new MenuWindow(
+                _login,
+                _authService,
+                _viktorynaService,
+                _korystuvachSettingsService,
+                _topResultsService,
+                _myResultsService);
             menuWindow.Show();
             Close();
         }
