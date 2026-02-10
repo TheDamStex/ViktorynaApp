@@ -1,4 +1,4 @@
-﻿// Services/JsonDaniService.cs
+﻿// Сервіс для роботи з JSON-даними
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +10,7 @@ namespace ViktorynaApp.Services
         private List<T>? _cachedData;
         private DateTime _lastCacheTime;
 
+        [Obsolete("Використовуйте конструктор з IDataStorage.")]
         public JsonDaniService(string imiaFailu)
         {
             _storage = new JsonStorage<T>(imiaFailu);

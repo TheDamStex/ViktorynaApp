@@ -19,7 +19,7 @@ namespace ViktorynaApp.Services
 
         public JsonStorage(string fileName)
         {
-            string dataFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Data");
+            string dataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             Directory.CreateDirectory(dataFolder);
 
             _filePath = Path.Combine(dataFolder, fileName);
