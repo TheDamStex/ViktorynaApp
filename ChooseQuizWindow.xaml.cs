@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using ViktorynaApp.Factories;
 using ViktorynaApp.Services;
 
 namespace ViktorynaApp
@@ -13,6 +14,7 @@ namespace ViktorynaApp
         private readonly IKorystuvachSettingsService _korystuvachSettingsService;
         private readonly ITopResultsService _topResultsService;
         private readonly IMyResultsService _myResultsService;
+        private readonly IWindowFactory _windowFactory;
         private List<string> _categories = new List<string>(); // Ініціалізуємо
 
         public ChooseQuizWindow(
@@ -21,7 +23,8 @@ namespace ViktorynaApp
             IViktorynaService viktorynaService,
             IKorystuvachSettingsService korystuvachSettingsService,
             ITopResultsService topResultsService,
-            IMyResultsService myResultsService)
+            IMyResultsService myResultsService,
+            IWindowFactory windowFactory)
         {
             InitializeComponent();
             _login = login;
@@ -30,6 +33,7 @@ namespace ViktorynaApp
             _korystuvachSettingsService = korystuvachSettingsService;
             _topResultsService = topResultsService;
             _myResultsService = myResultsService;
+            _windowFactory = windowFactory;
             ZavantazhytyKategorii();
         }
 
@@ -70,27 +74,14 @@ namespace ViktorynaApp
             }
 
             string selectedCategory = CategoriesList.SelectedItem.ToString()!;
-            var quizWindow = new ViktorynaWindow(
-                _login,
-                selectedCategory,
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            var quizWindow = _windowFactory.CreateViktorynaWindow(_login, selectedCategory);
             quizWindow.Show();
             Close();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(
-                _login,
-                _authService,
-                _viktorynaService,
-                _korystuvachSettingsService,
-                _topResultsService,
-                _myResultsService);
+            var menuWindow = _windowFactory.CreateMenuWindow(_login);
             menuWindow.Show();
             Close();
         }

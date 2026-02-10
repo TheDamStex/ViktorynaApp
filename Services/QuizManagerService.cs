@@ -20,15 +20,16 @@ namespace ViktorynaApp.Services
         {
             var questions = _viktorynaService.OtrymatyPytannia(category);
 
-            var session = new QuizSession
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserId = userId,
-                Category = category,
-                Questions = questions,
-                Answers = new List<QuestionResult>(),
-                StartTime = DateTime.Now
-            };
+            // Використовуємо будівельник для покрокового створення сесії.
+            var session = new QuizSessionBuilder()
+                .WithId(Guid.NewGuid().ToString())
+                .WithUserId(userId)
+                .WithCategory(category)
+                .WithQuestions(questions)
+                .WithStartTime(DateTime.Now)
+                .WithInitialScore(0)
+                .WithCurrentQuestionIndex(0)
+                .Build();
 
             _activeSessions[session.Id] = session;
             return session;
