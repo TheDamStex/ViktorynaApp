@@ -24,7 +24,8 @@ namespace ViktorynaApp.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            // Зворотне перетворення не використовується у цьому випадку.
+            return Binding.DoNothing;
         }
     }
 }
