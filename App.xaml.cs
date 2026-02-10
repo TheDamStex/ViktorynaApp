@@ -7,41 +7,34 @@ namespace ViktorynaApp
 {
     public partial class App : Application
     {
-        public static IKorystuvachService? KorystuvachService { get; private set; }
-        public static IViktorynaService? ViktorynaService { get; private set; }
-        public static IQuizManager? QuizManager { get; private set; }
-        public static IAuthService? AuthService { get; private set; }
-        public static IKorystuvachSettingsService? KorystuvachSettingsService { get; private set; } // НОВЕ
-        public static ITopResultsService? TopResultsService { get; private set; }
-        public static IMyResultsService? MyResultsService { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            InitsializuvatySeryvisy();
+            InitsializuvatyTaPokazatyGolovneVikno();
         }
 
-        private void InitsializuvatySeryvisy()
+        private void InitsializuvatyTaPokazatyGolovneVikno()
         {
             try
             {
-                KorystuvachService = ServiceFactory.CreateKorystuvachService();
-                ViktorynaService = ServiceFactory.CreateViktorynaService();
-                QuizManager = ServiceFactory.CreateQuizManager();
-                KorystuvachSettingsService = ServiceFactory.CreateKorystuvachSettingsService(); // НОВЕ
-                TopResultsService = ServiceFactory.CreateTopResultsService();
-                MyResultsService = ServiceFactory.CreateMyResultsService();
+                var korystuvachService = ServiceFactory.CreateKorystuvachService();
+                var viktorynaService = ServiceFactory.CreateViktorynaService();
+                var korystuvachSettingsService = ServiceFactory.CreateKorystuvachSettingsService();
+                var topResultsService = ServiceFactory.CreateTopResultsService();
+                var myResultsService = ServiceFactory.CreateMyResultsService();
 
                 var dataValidator = new DataValidator();
                 var validator = new KorystuvachValidator(dataValidator);
-                AuthService = new AuthService(KorystuvachService, validator);
+                var authService = new AuthService(korystuvachService, validator);
 
-                if (KorystuvachService == null || ViktorynaService == null ||
-                    AuthService == null || KorystuvachSettingsService == null) // Додали перевірку
-                {
-                    MessageBox.Show("Помилка ініціалізації сервісів");
-                    Shutdown();
-                }
+                var mainWindow = new MainWindow(
+                    authService,
+                    viktorynaService,
+                    korystuvachSettingsService,
+                    topResultsService,
+                    myResultsService);
+
+                mainWindow.Show();
             }
             catch (Exception ex)
             {

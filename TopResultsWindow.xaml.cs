@@ -1,23 +1,18 @@
 ﻿using System.Windows;
+using ViktorynaApp.Services;
 using ViktorynaApp.ViewModels;
 
 namespace ViktorynaApp
 {
     public partial class TopResultsWindow : Window
     {
-        public TopResultsWindow()
+        private readonly ITopResultsService _topResultsService;
+
+        public TopResultsWindow(ITopResultsService topResultsService)
         {
             InitializeComponent();
-
-            if (App.TopResultsService != null)
-            {
-                DataContext = new TopResultsViewModel(App.TopResultsService);
-            }
-            else
-            {
-                MessageBox.Show("Сервіс недоступний");
-                Close();
-            }
+            _topResultsService = topResultsService;
+            DataContext = new TopResultsViewModel(_topResultsService);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

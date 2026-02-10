@@ -1,14 +1,31 @@
 ﻿using System;
 using System.Windows;
 using ViktorynaApp.Models;
+using ViktorynaApp.Services;
 
 namespace ViktorynaApp
 {
     public partial class RegisterWindow : Window
     {
-        public RegisterWindow()
+        private readonly IAuthService _authService;
+        private readonly IViktorynaService _viktorynaService;
+        private readonly IKorystuvachSettingsService _korystuvachSettingsService;
+        private readonly ITopResultsService _topResultsService;
+        private readonly IMyResultsService _myResultsService;
+
+        public RegisterWindow(
+            IAuthService authService,
+            IViktorynaService viktorynaService,
+            IKorystuvachSettingsService korystuvachSettingsService,
+            ITopResultsService topResultsService,
+            IMyResultsService myResultsService)
         {
             InitializeComponent();
+            _authService = authService;
+            _viktorynaService = viktorynaService;
+            _korystuvachSettingsService = korystuvachSettingsService;
+            _topResultsService = topResultsService;
+            _myResultsService = myResultsService;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -30,32 +47,34 @@ namespace ViktorynaApp
                 DataNarodzhennia = DataPicker.SelectedDate.Value.ToString("dd.MM.yyyy")
             };
 
-            // Використовуємо сервіс з App
-            if (App.AuthService != null)
-            {
-                bool uspishno = App.AuthService.Register(novyiKorystuvach);
+            bool uspishno = _authService.Register(novyiKorystuvach);
 
-                if (uspishno)
-                {
-                    MessageBox.Show("Реєстрація успішна!");
-                    MainWindow main = new MainWindow();
-                    main.Show();
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("Помилка реєстрації. Можливо, логін вже зайнятий.");
-                }
+            if (uspishno)
+            {
+                MessageBox.Show("Реєстрація успішна!");
+                MainWindow main = new MainWindow(
+                    _authService,
+                    _viktorynaService,
+                    _korystuvachSettingsService,
+                    _topResultsService,
+                    _myResultsService);
+                main.Show();
+                Close();
             }
             else
             {
-                MessageBox.Show("Помилка ініціалізації сервісу");
+                MessageBox.Show("Помилка реєстрації. Можливо, логін вже зайнятий.");
             }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow main = new MainWindow();
+            MainWindow main = new MainWindow(
+                _authService,
+                _viktorynaService,
+                _korystuvachSettingsService,
+                _topResultsService,
+                _myResultsService);
             main.Show();
             Close();
         }

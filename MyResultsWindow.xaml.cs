@@ -1,23 +1,18 @@
 ﻿using System.Windows;
+using ViktorynaApp.Services;
 using ViktorynaApp.ViewModels;
 
 namespace ViktorynaApp
 {
     public partial class MyResultsWindow : Window
     {
-        public MyResultsWindow(string login)
+        private readonly IMyResultsService _myResultsService;
+
+        public MyResultsWindow(IMyResultsService myResultsService, string login)
         {
             InitializeComponent();
-
-            if (App.MyResultsService != null)
-            {
-                DataContext = new MyResultsViewModel(App.MyResultsService, login);
-            }
-            else
-            {
-                MessageBox.Show("Сервіс результатів недоступний");
-                Close();
-            }
+            _myResultsService = myResultsService;
+            DataContext = new MyResultsViewModel(_myResultsService, login);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

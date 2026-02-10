@@ -1,18 +1,35 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using ViktorynaApp.Services;
 
 namespace ViktorynaApp
 {
     public partial class ChooseQuizWindow : Window
     {
-        private string _login;
+        private readonly string _login;
+        private readonly IAuthService _authService;
+        private readonly IViktorynaService _viktorynaService;
+        private readonly IKorystuvachSettingsService _korystuvachSettingsService;
+        private readonly ITopResultsService _topResultsService;
+        private readonly IMyResultsService _myResultsService;
         private List<string> _categories = new List<string>(); // Ініціалізуємо
 
-        public ChooseQuizWindow(string login)
+        public ChooseQuizWindow(
+            string login,
+            IAuthService authService,
+            IViktorynaService viktorynaService,
+            IKorystuvachSettingsService korystuvachSettingsService,
+            ITopResultsService topResultsService,
+            IMyResultsService myResultsService)
         {
             InitializeComponent();
             _login = login;
+            _authService = authService;
+            _viktorynaService = viktorynaService;
+            _korystuvachSettingsService = korystuvachSettingsService;
+            _topResultsService = topResultsService;
+            _myResultsService = myResultsService;
             ZavantazhytyKategorii();
         }
 
@@ -30,14 +47,11 @@ namespace ViktorynaApp
             };
 
             // Можна також отримати категорії з сервісу
-            if (App.ViktorynaService != null)
+            var rozdily = _viktorynaService.OtrymatyVsiRozdily();
+            if (rozdily != null && rozdily.Any())
             {
-                var rozdily = App.ViktorynaService.OtrymatyVsiRozdily();
-                if (rozdily != null && rozdily.Any())
-                {
-                    _categories = rozdily;
-                    _categories.Add("Змішана");
-                }
+                _categories = rozdily;
+                _categories.Add("Змішана");
             }
 
             CategoriesList.ItemsSource = _categories;
@@ -56,14 +70,27 @@ namespace ViktorynaApp
             }
 
             string selectedCategory = CategoriesList.SelectedItem.ToString()!;
-            var quizWindow = new ViktorynaWindow(_login, selectedCategory);
+            var quizWindow = new ViktorynaWindow(
+                _login,
+                selectedCategory,
+                _authService,
+                _viktorynaService,
+                _korystuvachSettingsService,
+                _topResultsService,
+                _myResultsService);
             quizWindow.Show();
             Close();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(_login);
+            var menuWindow = new MenuWindow(
+                _login,
+                _authService,
+                _viktorynaService,
+                _korystuvachSettingsService,
+                _topResultsService,
+                _myResultsService);
             menuWindow.Show();
             Close();
         }
